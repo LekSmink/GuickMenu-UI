@@ -398,4 +398,11 @@ Tab3:AddButton({
   	end    
 })
 
+Tab3:AddButton({
+    Name = "Yield(ADM)",
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+    end
+})
+
 OrionLib:Init()
