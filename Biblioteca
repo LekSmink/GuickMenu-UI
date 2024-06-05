@@ -398,6 +398,10 @@ Tab3:AddButton({
   	end    
 })
 
+local Section = Tab3:AddSection({
+	Name = "Script ADM"
+})
+
 Tab3:AddButton({
     Name = "Yield(ADM)",
     Callback = function()
