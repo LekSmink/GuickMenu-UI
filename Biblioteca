@@ -14,6 +14,47 @@ OrionLib:MakeNotification({
 	Time = 5
 })
 
+local Tab4 = Window:MakeTab({
+	Name = "Menu",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+	Name = "Indentidade do player:"
+})
+
+local function updatePlayerName()
+  return game.Players.LocalPlayer.Name
+end
+
+Tab:AddLabel(updatePlayerName())
+
+local Section = Tab:AddSection({
+	Name = "Indentidade do ID:"
+})
+
+local function updatePlayerID()
+    return "Player ID: " .. tostring(game.Players.LocalPlayer.UserId)
+end
+
+Tab:AddLabel(updatePlayerID())
+
+local function copyPlayerID()
+    setclipboard(tostring(game.Players.LocalPlayer.UserId))
+    OrionLib:MakeNotification({
+        Name = "Link copiado!",
+        Content = "Player ID copiado nas áreas de transferência",
+        Image = "rbxassetid://4483345998",
+        Time = 5
+    })
+end
+
+Tab:AddButton({
+    Name = "Copiar Player ID",
+    Callback = copyPlayerID
+})
+
 local Tab2 = Window:MakeTab({
     Name = "Inf",
     Icon = "rbxassetid://4483345998",
