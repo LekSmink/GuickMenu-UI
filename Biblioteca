@@ -28,7 +28,7 @@ local function updatePlayerName()
   return game.Players.LocalPlayer.Name
 end
 
-Tab4:AddLabel(updatePlayerName())
+Tab5:AddLabel(updatePlayerName())
 
 local Section = Tab5:AddSection({
 	Name = "Indentidade do ID:"
@@ -38,7 +38,7 @@ local function updatePlayerID()
     return "Player ID: " .. tostring(game.Players.LocalPlayer.UserId)
 end
 
-Tab:AddLabel(updatePlayerID())
+Tab5:AddLabel(updatePlayerID())
 
 local function copyPlayerID()
     setclipboard(tostring(game.Players.LocalPlayer.UserId))
