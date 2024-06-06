@@ -14,13 +14,13 @@ OrionLib:MakeNotification({
 	Time = 5
 })
 
-local Tab4 = Window:MakeTab({
+local Tab5 = Window:MakeTab({
 	Name = "Menu",
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
 
-local Section = Tab4:AddSection({
+local Section = Tab5:AddSection({
 	Name = "Indentidade do player:"
 })
 
@@ -30,7 +30,7 @@ end
 
 Tab4:AddLabel(updatePlayerName())
 
-local Section = Tab4:AddSection({
+local Section = Tab5:AddSection({
 	Name = "Indentidade do ID:"
 })
 
@@ -50,7 +50,7 @@ local function copyPlayerID()
     })
 end
 
-Tab4:AddButton({
+Tab5:AddButton({
     Name = "Copiar Player ID",
     Callback = copyPlayerID
 })
