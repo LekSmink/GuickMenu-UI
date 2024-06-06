@@ -20,7 +20,7 @@ local Tab4 = Window:MakeTab({
 	PremiumOnly = false
 })
 
-local Section = Tab:AddSection({
+local Section = Tab4:AddSection({
 	Name = "Indentidade do player:"
 })
 
@@ -28,9 +28,9 @@ local function updatePlayerName()
   return game.Players.LocalPlayer.Name
 end
 
-Tab:AddLabel(updatePlayerName())
+Tab4:AddLabel(updatePlayerName())
 
-local Section = Tab:AddSection({
+local Section = Tab4:AddSection({
 	Name = "Indentidade do ID:"
 })
 
@@ -50,7 +50,7 @@ local function copyPlayerID()
     })
 end
 
-Tab:AddButton({
+Tab4:AddButton({
     Name = "Copiar Player ID",
     Callback = copyPlayerID
 })
