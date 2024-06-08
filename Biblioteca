@@ -8,51 +8,80 @@ local Window = OrionLib:MakeWindow({
 })
 
 OrionLib:MakeNotification({
-	Name = "Obrigada por usar meu script",
-	Content = "Entre no meu Discord e no ytb para apoiar o desenvolvedor na Tab Inf",
-	Image = "rbxassetid://4483345998",
-	Time = 5
+    Name = "Obrigada por usar meu script",
+    Content = "Entre no meu Discord e no ytb para apoiar o desenvolvedor na Tab Inf",
+    Image = "rbxassetid://4483345998",
+    Time = 5
 })
 
 local Tab5 = Window:MakeTab({
-	Name = "Menu",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+    Name = "Menu",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
 
-local Section = Tab5:AddSection({
-	Name = "Indentidade do player:"
-})
+local startTime = tick()
+local executionLabel
 
-local function updatePlayerName()
-  return game.Players.LocalPlayer.Name
+local function updateExecutionTime()
+    local elapsedTime = tick() - startTime
+    local elapsedMinutes = math.floor(elapsedTime / 60)
+    local elapsedSeconds = math.floor(elapsedTime % 60)
+    executionLabel:Set("Time Executed: " .. elapsedMinutes .. " minutes " .. elapsedSeconds .. " seconds")
 end
 
-Tab5:AddLabel(updatePlayerName())
+executionLabel = Tab5:AddLabel("Time Executed: 0 minutes 0 seconds")
 
-local Section = Tab5:AddSection({
-	Name = "Indentidade do ID:"
-})
+coroutine.wrap(function()
+    while true do
+        wait(1)
+        updateExecutionTime()
+    end
+end)()
 
-local function updatePlayerID()
-    return "Player ID: " .. tostring(game.Players.LocalPlayer.UserId)
+Tab5:AddSection({ Name = "Identidade do player:" })
+Tab5:AddLabel(game.Players.LocalPlayer.Name)
+
+Tab5:AddSection({ Name = "Identidade do ID:" })
+Tab5:AddLabel("Player ID: " .. tostring(game.Players.LocalPlayer.UserId))
+
+local function getIDs()
+    local playerID = tostring(game.Players.LocalPlayer.UserId)
+    local gameID = tostring(game.PlaceId)
+    return "Player ID: " .. playerID .. "\nGame ID: " .. gameID
 end
 
-Tab5:AddLabel(updatePlayerID())
+Tab5:AddLabel(getIDs())
 
-local function copyPlayerID()
-    setclipboard(tostring(game.Players.LocalPlayer.UserId))
-    OrionLib:MakeNotification({
-        Name = "Link copiado!",
-        Content = "Player ID copiado nas áreas de transferência",
-        Image = "rbxassetid://4483345998",
-        Time = 5
-    })
+Tab5:AddButton({
+    Name = "Copiar ID do Jogador e do Jogo",
+    Callback = function()
+        setclipboard(getIDs())
+        OrionLib:MakeNotification({
+            Name = "Copiado!",
+            Content = "IDscopiados para a área de transferência",
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
+    end
+})
+
+local jumping = false
+
+local function toggleJumping()
+    jumping = not jumping
+    while jumping do
+        local player = game.Players.LocalPlayer
+        if player and player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+            player.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+        wait(0.5)
+    end
 end
 
 Tab5:AddButton({
-    Name = "Copiar Player ID",
-    Callback = copyPlayerID
+    Name = "Ativar/Desativar Pulo Infinito",
+    Callback = toggleJumping    
 })
 
 local Tab2 = Window:MakeTab({
@@ -61,37 +90,36 @@ local Tab2 = Window:MakeTab({
     PremiumOnly = false
 })
 
-Tab2:AddParagraph("Versão do Script:","V1.0")
-Tab2:AddParagraph("Data de criação","03/06/2024")
+Tab2:AddParagraph("Versão do Script:", "V1.0")
+Tab2:AddParagraph("Data de criação", "03/06/2024")
+Tab2:AddParagraph("Criado:", "JR_Smink")
 
-local Section = Tab2:AddSection({
-	Name = "Entre no meu Discord por favor"
+Tab2:AddSection({ Name = "Entre no meu Discord por favor" })
+
+Tab2:AddButton({
+    Name = "Discord principal",
+    Callback = function()
+        setclipboard("https://discord.com/invite/XFUQggvG")
+        OrionLib:MakeNotification({
+            Name = "Link Copiado!",
+            Content = "Vá para o navegador e coloque o link e aceite o convite! estamos esperando...",
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
+    end    
 })
 
 Tab2:AddButton({
-	Name = "Discord principal",
-	Callback = function()
-      		setclipboard("https://discord.com/invite/XFUQggvG")
-      		OrionLib:MakeNotification({
-	Name = "Link Copiado!",
-	Content = "Vá para o navegador e coloque o link e aceite o convite! estamos esperando...",
-	Image = "rbxassetid://4483345998",
-	Time = 5
-})
-  	end    
-})
-
-Tab2:AddButton({
-	Name = "Discord Secundária",
-	Callback = function()
-      		setclipboard("https://discord.com/invite/Dc3a4Nrh")
-      		OrionLib:MakeNotification({
-      		Name = "Link Copiado!",
-	Content = "Vá para o navegador e coloque o link e aceite o convite! estamos esperando...",
-	Image = "rbxassetid://4483345998",
-	Time = 5
-})
-  	end    
+    Name = "Discord Secundária",
+    Callback = function()
+        setclipboard("https://discord.com/invite/Dc3a4Nrh")
+        OrionLib:MakeNotification({
+            Name = "Link Copiado!",
+            Content = "Vá para o navegador e coloque o link e aceite o convite! estamos esperando...",
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
+    end    
 })
 
 local Tab1 = Window:MakeTab({
@@ -100,76 +128,11 @@ local Tab1 = Window:MakeTab({
     PremiumOnly = false
 })
 
-local Section = Tab1:AddSection({
-	Name = "Esp Player"
-})
-
-local espColor = Color3.fromRGB(0, 255, 0)
-local espEnabled = false
-local espBoxes = {}
-
-local function drawESP(target)
-    local espBox = Drawing.new("Square")
-    espBox.Visible = false
-    espBox.Color = espColor
-    espBox.Thickness = 2
-    espBox.Filled = false
-
-    local function updateESP()
-        local targetPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(target.Position)
-        if onScreen then
-            local targetSize = target.Size * 3.5
-            espBox.Size = Vector2.new(targetSize.X, targetSize.Y)
-            espBox.Position = Vector2.new(targetPos.X - targetSize.X / 2, targetPos.Y - targetSize.Y / 2)
-            espBox.Visible = true
-        else
-            espBox.Visible = false
-        end
-    end
-
-    return updateESP, espBox
-end
-
-local function findPlayers()
-    for _, player in pairs(game.Players:GetPlayers()) do
-        if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local targetPart = player.Character:FindFirstChild("HumanoidRootPart")
-            if targetPart then
-                local updateESP, espBox = drawESP(targetPart)
-                table.insert(espBoxes, {updateESP = updateESP, espBox = espBox})
-            end
-        end
-    end
-end
-
-game:GetService("RunService").RenderStepped:Connect(function()
-    if espEnabled then
-        for _, espData in pairs(espBoxes) do
-            espData.updateESP()
-        end
-    end
-end)
-
-Tab1:AddToggle({
-    Name = "Player ESP",
-    Default = false,
-    Callback = function(value)
-        espEnabled = value
-        if espEnabled then
-            findPlayers()
-        else
-            for _, espData in pairs(espBoxes) do
-                espData.espBox.Visible = false
-            end
-            espBoxes = {}
-        end
-    end    
-})
-
 local espColor = Color3.fromRGB(0, 255, 0)
 local espEnabled = false
 local espBoxes = {}
 local espTracers = {}
+local espTextLabels = {}
 
 local function drawESPBox(target)
     local espBox = Drawing.new("Square")
@@ -213,6 +176,34 @@ local function drawESPTracer(target)
     return updateTracer, tracer
 end
 
+local function drawESPText(target, playerName)
+    local textLabel = Drawing.new("Text")
+    textLabel.Visible = false
+    textLabel.Color = espColor
+    textLabel.Center = true
+    textLabel.Outline = true
+    textLabel.Font = Drawing.Fonts.UI
+    textLabel.Size = 20
+
+    local function updateESPText()
+        if target.Parent then
+            local targetPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(target.Position)
+            if onScreen then
+                local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - target.Position).Magnitude
+                textLabel.Text = playerName .. " [" .. math.floor(distance) .. "m]"
+                textLabel.Position = Vector2.new(targetPos.X, targetPos.Y - 30)
+                textLabel.Visible = true
+            else
+                textLabel.Visible = false
+            end
+        else
+            textLabel.Visible = false
+        end
+    end
+
+    return updateESPText, textLabel
+end
+
 local function findPlayers()
     for _, player in pairs(game.Players:GetPlayers()) do
         if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
@@ -220,8 +211,10 @@ local function findPlayers()
             if targetPart then
                 local updateESPBox, espBox = drawESPBox(targetPart)
                 local updateTracer, tracer = drawESPTracer(targetPart)
+                local updateESPText, textLabel = drawESPText(targetPart, player.Name)
                 table.insert(espBoxes, {updateESP = updateESPBox, espBox = espBox})
                 table.insert(espTracers, {updateESP = updateTracer, tracer = tracer})
+                table.insert(espTextLabels, {updateESP = updateESPText, textLabel = textLabel})
             end
         end
     end
@@ -235,11 +228,14 @@ game:GetService("RunService").RenderStepped:Connect(function()
         for _, tracerData in pairs(espTracers) do
             tracerData.updateESP()
         end
+        for _, espData in pairs(espTextLabels) do
+            espData.updateESP()
+        end
     end
 end)
 
 Tab1:AddToggle({
-    Name = "Player ESP(traço)",
+    Name = "Player ESP (caixa)",
     Default = false,
     Callback = function(value)
         espEnabled = value
@@ -249,11 +245,28 @@ Tab1:AddToggle({
             for _, espData in pairs(espBoxes) do
                 espData.espBox.Visible = false
             end
+            espBoxes = {}
+        end
+    end    
+})
+
+Tab1:AddToggle({
+    Name = "Player ESP (traço)",
+    Default = false,
+    Callback = function(value)
+        espEnabled = value
+        if espEnabled then
+            findPlayers()
+        else
             for _, tracerData in pairs(espTracers) do
                 tracerData.tracer.Visible = false
             end
+            for _, espData in pairs(espTextLabels) do
+                espData.textLabel.Visible = false
+            end
             espBoxes = {}
             espTracers = {}
+            espTextLabels = {}
         end
     end    
 })
@@ -440,13 +453,109 @@ Tab3:AddButton({
 })
 
 local Section = Tab3:AddSection({
-	Name = "Script ADM"
+	Name = "Script Adm"
 })
 
 Tab3:AddButton({
     Name = "Yield(ADM)",
     Callback = function()
         loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+    end
+})
+
+local Tab6 = Window:MakeTab({
+	Name = "Visual",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local function makeInvisible()
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        for _, part in pairs(character:GetChildren()) do
+            if part:IsA("BasePart") or part:IsA("Decal") then
+                part.Transparency = 1
+                if part:FindFirstChildOfClass("Decal") then
+                    part:FindFirstChildOfClass("Decal").Transparency = 1
+                end
+            end
+        end
+    end
+end
+
+local function makeVisible()
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        for _, part in pairs(character:GetChildren()) do
+            if part:IsA("BasePart") or part:IsA("Decal") then
+                part.Transparency = 0
+                if part:FindFirstChildOfClass("Decal") then
+                    part:FindFirstChildOfClass("Decal").Transparency = 0
+                end
+            end
+        end
+    end
+end
+
+local Section = Tab6:AddSection({
+	Name = "Visual (só aparece para o player)"
+})
+
+Tab6:AddButton({
+    Name = "Tornar Invisível",
+    Callback = function()
+        makeInvisible()
+    end
+})
+
+local function createEffect(character, color)
+    local effect = Instance.new("ParticleEmitter")
+    effect.Texture = "rbxassetid://2430980981"
+    effect.Color = ColorSequence.new(color)
+    effect.Lifetime = NumberRange.new(0.5)
+    effect.Rate = 500
+    effect.Speed = NumberRange.new(5)
+    effect.Parent = character:FindFirstChildWhichIsA("BasePart")
+    wait(0.5)
+    effect.Enabled = false
+    wait(1)
+    effect:Destroy()
+end
+
+local function makeInvisible()
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        createEffect(character, Color3.fromRGB(255, 255, 255))
+        for _, part in pairs(character:GetChildren()) do
+            if part:IsA("BasePart") or part:IsA("Decal") then
+                part.Transparency = 1
+                if part:FindFirstChildOfClass("Decal") then
+                    part:FindFirstChildOfClass("Decal").Transparency = 1
+                end
+            end
+        end
+    end
+end
+
+local function makeVisible()
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        createEffect(character, Color3.fromRGB(0, 255, 0))
+        for _, part in pairs(character:GetChildren()) do
+            if part:IsA("BasePart") or part:IsA("Decal") then
+                part.Transparency = 0
+                if part:FindFirstChildOfClass("Decal") then
+                    part:FindFirstChildOfClass("Decal").Transparency = 0
+                end
+            end
+        end
+    end
+end
+
+Tab6:AddButton({
+    Name = "Tornar Invisível(efeito)",
+    Callback = function()
+        makeInvisible()
     end
 })
 
