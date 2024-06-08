@@ -605,4 +605,36 @@ Tab6:AddButton({
     end
 })
 
+local infiniteJumpEnabled = false
+
+local function toggleInfiniteJump()
+    infiniteJumpEnabled = not infiniteJumpEnabled
+end
+
+local function onJumpRequest()
+    if infiniteJumpEnabled then
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end
+end
+
+game:GetService("UserInputService").JumpRequest:Connect(onJumpRequest)
+
+Tab6:AddButton({
+    Name = "Pulo infinito",
+    Callback = function()
+        toggleInfiniteJump()
+        OrionLib:MakeNotification({
+            Name = "Infinite Jump",
+            Content = infiniteJumpEnabled and "Enabled" or "Disabled",
+            Image = "rbxassetid://4483345998",
+            Time = 3
+        })
+    end
+})
+
 OrionLib:Init()
