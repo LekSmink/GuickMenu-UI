@@ -560,7 +560,7 @@ Tab6:AddButton({
 })
 
 local Section = Tab6:AddSection({
-	Name = ""
+	Name = " "
 })
 
 local canDoubleJump = false
