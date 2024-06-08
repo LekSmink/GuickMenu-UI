@@ -559,4 +559,50 @@ Tab6:AddButton({
     end
 })
 
+local Section = Tab6:AddSection({
+	Name = ""
+})
+
+local canDoubleJump = false
+local doubleJumping = false
+local doubleJumpHeight = 50
+
+local function enableDoubleJump()
+    canDoubleJump = true
+end
+
+local function disableDoubleJump()
+    canDoubleJump = false
+end
+
+local function onJumpRequest()
+    if canDoubleJump and not doubleJumping then
+        doubleJumping = true
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChildOfClass("Humanoid") then
+            character.Humanoid.JumpPower = doubleJumpHeight
+            character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+        wait(0.2)
+        character.Humanoid.JumpPower = 50
+        doubleJumping = false
+    end
+end
+
+game:GetService("UserInputService").JumpRequest:Connect(onJumpRequest)
+
+Tab6:AddButton({
+    Name = "Ativar Salto Duplo",
+    Callback = function()
+        enableDoubleJump()
+    end
+})
+
+Tab6:AddButton({
+    Name = "Desativar Salto Duplo",
+    Callback = function()
+        disableDoubleJump()
+    end
+})
+
 OrionLib:Init()
