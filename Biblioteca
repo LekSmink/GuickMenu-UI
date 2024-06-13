@@ -20,6 +20,10 @@ local Tab5 = Window:MakeTab({
     PremiumOnly = false
 })
 
+local Section = Tab5:AddSection({
+	Name = "Tempo executado:"
+})
+
 local startTime = tick()
 local executionLabel
 
@@ -27,10 +31,10 @@ local function updateExecutionTime()
     local elapsedTime = tick() - startTime
     local elapsedMinutes = math.floor(elapsedTime / 60)
     local elapsedSeconds = math.floor(elapsedTime % 60)
-    executionLabel:Set("Time Executed: " .. elapsedMinutes .. " minutes " .. elapsedSeconds .. " seconds")
+    executionLabel:Set("Tempo: " .. elapsedMinutes .. " minutos " .. elapsedSeconds .. " segundos")
 end
 
-executionLabel = Tab5:AddLabel("Time Executed: 0 minutes 0 seconds")
+executionLabel = Tab5:AddLabel("Tempo: 0 minutos 0 segundos")
 
 coroutine.wrap(function()
     while true do
@@ -58,8 +62,8 @@ Tab5:AddButton({
     Callback = function()
         setclipboard(getIDs())
         OrionLib:MakeNotification({
-            Name = "Copiado!",
-            Content = "IDscopiados para a área de transferência",
+            Name = "Link Copiado!",
+            Content = "Vá para o navegador e coloque o link e aceite o convite! estamos esperando...",
             Image = "rbxassetid://4483345998",
             Time = 5
         })
@@ -90,7 +94,7 @@ local Tab2 = Window:MakeTab({
     PremiumOnly = false
 })
 
-Tab2:AddParagraph("Versão do Script:", "V1.0")
+Tab2:AddParagraph("Versão do Script:", "V1.5")
 Tab2:AddParagraph("Data de criação", "03/06/2024")
 Tab2:AddParagraph("Criado:", "JR_Smink")
 
@@ -109,6 +113,10 @@ Tab2:AddButton({
     end    
 })
 
+local Section = Tab2:AddSection({
+	Name = "Discord Secundário:"
+})
+
 Tab2:AddButton({
     Name = "Discord Secundária",
     Callback = function()
@@ -116,6 +124,23 @@ Tab2:AddButton({
         OrionLib:MakeNotification({
             Name = "Link Copiado!",
             Content = "Vá para o navegador e coloque o link e aceite o convite! estamos esperando...",
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
+    end    
+})
+
+local Section = Tab2:AddSection({
+	Name = "YouTube(canal)"
+})
+
+Tab2:AddButton({
+    Name = "Smink_Script",
+    Callback = function()
+        setclipboard("https://youtube.com/@sminkofc163?si=__rjRYo-WAJiTFj0")
+        OrionLib:MakeNotification({
+            Name = "Link Copiado!",
+            Content = "Vá para o YouTube e cole e se escrevam! estamos esperando...",
             Image = "rbxassetid://4483345998",
             Time = 5
         })
@@ -469,98 +494,60 @@ local Tab6 = Window:MakeTab({
 	PremiumOnly = false
 })
 
-local function makeInvisible()
-    local character = game.Players.LocalPlayer.Character
-    if character then
-        for _, part in pairs(character:GetChildren()) do
-            if part:IsA("BasePart") or part:IsA("Decal") then
-                part.Transparency = 1
-                if part:FindFirstChildOfClass("Decal") then
-                    part:FindFirstChildOfClass("Decal").Transparency = 1
-                end
-            end
-        end
-    end
-end
-
-local function makeVisible()
-    local character = game.Players.LocalPlayer.Character
-    if character then
-        for _, part in pairs(character:GetChildren()) do
-            if part:IsA("BasePart") or part:IsA("Decal") then
-                part.Transparency = 0
-                if part:FindFirstChildOfClass("Decal") then
-                    part:FindFirstChildOfClass("Decal").Transparency = 0
-                end
-            end
-        end
-    end
-end
-
 local Section = Tab6:AddSection({
-	Name = "Visual (só aparece para o player)"
+	Name = "Visual:"
 })
 
-Tab6:AddButton({
-    Name = "Tornar Invisível",
-    Callback = function()
-        makeInvisible()
-    end
-})
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
 
-local function createEffect(character, color)
-    local effect = Instance.new("ParticleEmitter")
-    effect.Texture = "rbxassetid://2430980981"
-    effect.Color = ColorSequence.new(color)
-    effect.Lifetime = NumberRange.new(0.5)
-    effect.Rate = 500
-    effect.Speed = NumberRange.new(5)
-    effect.Parent = character:FindFirstChildWhichIsA("BasePart")
-    wait(0.5)
-    effect.Enabled = false
-    wait(1)
-    effect:Destroy()
-end
-
-local function makeInvisible()
-    local character = game.Players.LocalPlayer.Character
-    if character then
-        createEffect(character, Color3.fromRGB(255, 255, 255))
-        for _, part in pairs(character:GetChildren()) do
-            if part:IsA("BasePart") or part:IsA("Decal") then
-                part.Transparency = 1
-                if part:FindFirstChildOfClass("Decal") then
-                    part:FindFirstChildOfClass("Decal").Transparency = 1
+local function setInvisibleGlobally()
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.Transparency = 1
+            if part:FindFirstChildOfClass("Decal") then
+                for _, decal in pairs(part:GetChildren()) do
+                    if decal:IsA("Decal") then
+                        decal.Transparency = 1
+                    end
                 end
             end
         end
     end
 end
 
-local function makeVisible()
-    local character = game.Players.LocalPlayer.Character
-    if character then
-        createEffect(character, Color3.fromRGB(0, 255, 0))
-        for _, part in pairs(character:GetChildren()) do
-            if part:IsA("BasePart") or part:IsA("Decal") then
-                part.Transparency = 0
-                if part:FindFirstChildOfClass("Decal") then
-                    part:FindFirstChildOfClass("Decal").Transparency = 0
+local function setVisibleGlobally()
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.Transparency = 0
+            if part:FindFirstChildOfClass("Decal") then
+                for _, decal in pairs(part:GetChildren()) do
+                    if decal:IsA("Decal") then
+                        decal.Transparency = 0
+                    end
                 end
             end
         end
     end
 end
 
-Tab6:AddButton({
-    Name = "Tornar Invisível(efeito)",
-    Callback = function()
-        makeInvisible()
+local invisibleEnabled = false
+
+Tab6:AddToggle({
+    Name = "Tornar invisível",
+    Default = false,
+    Callback = function(Value)
+        invisibleEnabled = Value
+        if invisibleEnabled then
+            setInvisibleGlobally()
+        else
+            setVisibleGlobally()
+        end
     end
 })
 
 local Section = Tab6:AddSection({
-	Name = " "
+	Name = "não visual:"
 })
 
 local canDoubleJump = false
@@ -629,8 +616,8 @@ Tab6:AddButton({
     Callback = function()
         toggleInfiniteJump()
         OrionLib:MakeNotification({
-            Name = "Infinite Jump",
-            Content = infiniteJumpEnabled and "Enabled" or "Disabled",
+            Name = "Pulo infinito",
+            Content = infiniteJumpEnabled and "Ativado" or "Desativado",
             Image = "rbxassetid://4483345998",
             Time = 3
         })
