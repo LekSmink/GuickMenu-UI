@@ -454,6 +454,13 @@ setPlayerSpeed(defaultSpeed)
 setPlayerJumpPower(defaultJumpPower)
 setGravity(defaultGravity)
 
+Tab:AddButton({
+	Name = "fly",
+	Callback = function()
+      		loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+  	end    
+})
+
 local Tab3 = Window:MakeTab({
     Name = "Créditos",
     Icon = "rbxassetid://4483345998",
@@ -548,6 +555,24 @@ Tab6:AddToggle({
 
 local Section = Tab6:AddSection({
 	Name = "não visual:"
+})
+
+local function ReiniciarPlayer()
+    local character = player.Character
+
+    if character then
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.Health = 0
+        end
+
+        player.CharacterAdded:Wait()
+    end
+end
+
+Tab6:AddButton({
+    Name = "Reiniciar Player",
+    Callback = ReiniciarPlayer
 })
 
 local canDoubleJump = false
